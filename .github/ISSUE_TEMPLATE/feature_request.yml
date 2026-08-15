@@ -1,0 +1,16 @@
+name: Feature request
+description: Suggest an improvement to DSH Agent Mesh.
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Harness or DSH surface affected
+      description: Mention the protocol, UI slot, tool, or workflow this would touch.

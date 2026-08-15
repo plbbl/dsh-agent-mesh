@@ -1,0 +1,11 @@
+# Agent Mesh mounts one host control-plane plugin. The host side registers
+# tools/routes/native LLM providers; package metadata mounts the tiny native
+# composer model-seat shadow separately.
+- insert:
+    - id: agent-mesh
+      name: dsh-agent-mesh
+      config:
+        homeDir: !!js dshHomePath('agent-mesh')
+        includeDefaults: true
+        autoDiscover: true
+        snapshotEvery: 128

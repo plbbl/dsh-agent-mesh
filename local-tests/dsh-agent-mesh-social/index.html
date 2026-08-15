@@ -1,0 +1,1688 @@
+<!doctype html>
+<html lang="zh-CN" data-style="soviet-building-system">
+<head>
+  <meta charset="utf-8">
+  <title>DSH Agent Mesh · Soviet Building-System Social Cards</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    /* =========================================================
+       Swiss International — Social Card Seed Template
+       ---------------------------------------------------------
+       Three boards built in one HTML:
+         .poster.xhs      1080×1440  (3:4   小红书)
+         .poster.square   1080×1080  (1:1   微信方封面)
+         .poster.wide     2100× 900  (21:9  微信主封面)
+         .pair-preview                       21:9 + 1:1 配对预览
+
+       Accent switching via <html data-accent="…">:
+         ikb (Klein Blue) | lemon-yellow | lemon-green | safety-orange
+
+       Fill posters where marked <!-- POSTERS_HERE -->.
+       Each poster carries one Layout Recipe (S01-S12) from
+       references/layout-recipes.md.
+       ========================================================= */
+
+    /* ---------- 1. Accent palettes (4 mutually exclusive) ---------- */
+    :root,
+    [data-accent="ikb"] {
+      --paper: #fafaf8;
+      --ink: #0a0a0a;
+      --grey-1: #f0f0ee;
+      --grey-2: #d4d4d2;
+      --grey-3: #737373;
+      --accent: #002FA7;
+      --accent-on: #ffffff;
+    }
+    [data-accent="lemon-yellow"] {
+      --paper: #fafaf8;
+      --ink: #0a0a0a;
+      --grey-1: #f0f0ee;
+      --grey-2: #d4d4d2;
+      --grey-3: #737373;
+      --accent: #FFD500;
+      --accent-on: #0a0a0a;
+    }
+    [data-accent="lemon-green"] {
+      --paper: #fafaf8;
+      --ink: #0a0a0a;
+      --grey-1: #f0f0ee;
+      --grey-2: #d4d4d2;
+      --grey-3: #737373;
+      --accent: #C5E803;
+      --accent-on: #0a0a0a;
+    }
+    [data-accent="safety-orange"] {
+      --paper: #fafaf8;
+      --ink: #0a0a0a;
+      --grey-1: #f0f0ee;
+      --grey-2: #d4d4d2;
+      --grey-3: #737373;
+      --accent: #FF6B35;
+      --accent-on: #ffffff;
+    }
+
+    /* ---------- 2. Typography stack ---------- */
+    :root {
+      --sans:    "Inter", "Helvetica Neue", Helvetica, "Noto Sans SC",
+                 -apple-system, "PingFang SC", "Microsoft YaHei UI", sans-serif;
+      --sans-zh: "Noto Sans SC", -apple-system, "PingFang SC",
+                 "Microsoft YaHei UI", "Inter", sans-serif;
+      --mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace;
+    }
+
+    /* ---------- 3. Spacing tokens (8/12/16/24/32/40/48/64/80/96/160) ---------- */
+    :root {
+      --sp-3:   8px;
+      --sp-4:  12px;
+      --sp-5:  16px;
+      --sp-6:  24px;
+      --sp-7:  32px;
+      --sp-8:  40px;
+      --sp-9:  48px;
+      --sp-10: 64px;
+      --sp-11: 80px;
+      --sp-12: 96px;
+      --sp-13:160px;
+    }
+
+    /* ---------- 4. Reset & sheet ---------- */
+    *,*::before,*::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #1a1a1a;
+      font-family: var(--sans);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding: 64px 32px;
+    }
+    .sheet {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+    }
+
+    /* ---------- 5. Poster boards (fixed export sizes) ---------- */
+    .poster {
+      position: relative;
+      background: var(--paper);
+      color: var(--ink);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .poster.xhs    { width: 1080px; height: 1440px; }
+    .poster.square { width: 1080px; height: 1080px; }
+    .poster.wide   { width: 2100px; height:  900px; }
+    .poster figure { margin: 0; }
+
+    .poster.xhs    .content { padding: var(--sp-12) var(--sp-11); }
+    .poster.square .content { padding: var(--sp-11) var(--sp-11); }
+    .poster.wide   .content { padding: var(--sp-11) var(--sp-13); }
+    .content { position: relative; width: 100%; height: 100%; z-index: 2; }
+
+    /* Optional decorative layers — opt in per poster */
+    .dot-mat,
+    .ring-mat,
+    .cross-mat {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .dot-mat {
+      opacity: .08;
+      background-image: radial-gradient(var(--ink) 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+    }
+    .ring-mat {
+      opacity: .08;
+      background-image: radial-gradient(circle at 50% 50%, transparent 4px, var(--ink) 4.5px, var(--ink) 5px, transparent 5.5px);
+      background-size: 32px 32px;
+    }
+    .cross-mat {
+      opacity: .06;
+      background-image:
+        linear-gradient(var(--ink), var(--ink)),
+        linear-gradient(90deg, var(--ink), var(--ink));
+      background-size: 1px 14px, 14px 1px;
+      background-position: center, center;
+      background-repeat: repeat;
+    }
+
+    /* ---------- 6. Typography roles (Swiss extreme contrast) ----------
+       Hard rule: "the larger, the lighter"
+       ≥ 200px → weight 200 (ExtraLight)
+       Smaller text gets heavier weight (≥ 500). */
+    .h-hero {
+      font-family: var(--sans);
+      font-weight: 200;
+      font-size: 240px;
+      line-height: 1.02;
+      letter-spacing: -.02em;
+      margin: 0;
+      color: var(--ink);
+    }
+    .h-statement {
+      font-family: var(--sans);
+      font-weight: 200;
+      font-size: 180px;
+      line-height: 1.05;
+      letter-spacing: -.015em;
+      margin: 0;
+      color: var(--ink);
+    }
+    .h-xl {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 120px;
+      line-height: 1.08;
+      letter-spacing: -.01em;
+      margin: 0;
+      color: var(--ink);
+    }
+    .h-md {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 56px;
+      line-height: 1.18;
+      margin: 0;
+      color: var(--ink);
+    }
+    .lead {
+      font-family: var(--sans-zh);
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 1.55;
+      color: var(--ink);
+      margin: 0;
+    }
+    .body {
+      font-family: var(--sans-zh);
+      font-weight: 400;
+      font-size: 26px;
+      line-height: 1.6;
+      color: var(--ink);
+      margin: 0;
+    }
+    .t-cat {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 22px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0;
+    }
+    .t-meta {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 20px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--grey-3);
+      margin: 0;
+    }
+    .num-mega {
+      font-family: var(--sans);
+      font-weight: 200;
+      font-size: 200px;
+      line-height: .92;
+      letter-spacing: -.03em;
+      color: var(--ink);
+      margin: 0;
+    }
+    .num-xl {
+      font-family: var(--sans);
+      font-weight: 200;
+      font-size: 144px;
+      line-height: .96;
+      letter-spacing: -.02em;
+      margin: 0;
+    }
+    .mono { font-family: var(--mono); }
+
+    /* XHS (3:4) boards: 1080×1440 has the tightest vertical budget,
+       so display sizes step down vs the .wide default. These caps
+       were validated by the smoke-ai-tools deck — 2-line h-xl @96px
+       leaves room for matrix + hero-stat-bottom inside 1440px. */
+    .poster.xhs .h-hero          { font-size: 168px; }
+    .poster.xhs .h-statement     { font-size: 124px; }
+    .poster.xhs .h-xl            { font-size: 96px; }
+    .poster.xhs .num-mega        { font-size: 168px; }
+    .poster.xhs .num-xl          { font-size: 120px; }
+
+    /* Square boards tighten scales */
+    .poster.square .h-hero       { font-size: 180px; }
+    .poster.square .h-statement  { font-size: 140px; }
+    .poster.square .h-xl         { font-size: 88px; }
+    .poster.square .num-mega     { font-size: 168px; }
+    .poster.square .num-xl       { font-size: 112px; }
+
+    /* Wide boards rely on horizontal real estate */
+    .poster.wide .h-hero         { font-size: 200px; }
+    .poster.wide .h-statement    { font-size: 156px; }
+    .poster.wide .h-xl           { font-size: 104px; }
+
+    /* ---------- 7. Layout primitives ---------- */
+    .stack    { display: flex; flex-direction: column; }
+    .row      { display: flex; flex-direction: row; }
+    .gap-3    { gap: var(--sp-3); }
+    .gap-4    { gap: var(--sp-4); }
+    .gap-5    { gap: var(--sp-5); }
+    .gap-6    { gap: var(--sp-6); }
+    .gap-7    { gap: var(--sp-7); }
+    .gap-8    { gap: var(--sp-8); }
+    .gap-9    { gap: var(--sp-9); }
+    .gap-10   { gap: var(--sp-10); }
+    .grow     { flex: 1; }
+    .grid-12  { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--sp-7); }
+    .grid-2-9 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-9); }
+    .grid-3   { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-7); }
+    .grid-4   { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-6); }
+    .span-2   { grid-column: span 2; }
+    .span-3   { grid-column: span 3; }
+    .span-4   { grid-column: span 4; }
+    .span-6   { grid-column: span 6; }
+    .span-8   { grid-column: span 8; }
+    .span-9   { grid-column: span 9; }
+    .span-12  { grid-column: span 12; }
+    .center   { text-align: center; }
+    .right    { text-align: right; }
+    .uppercase{ text-transform: uppercase; }
+    .hr-hairline {
+      height: 1px;
+      background: var(--grey-2);
+      border: 0;
+      margin: 0;
+    }
+    .hr-accent {
+      height: 3px;
+      background: var(--accent);
+      border: 0;
+      width: 96px;
+      margin: 0;
+    }
+
+    /* ---------- 8. Card fills (mutually exclusive — pick ONE) ----------
+       Hard rule: never combine card-ink/card-accent/card-fill/card-outlined
+       on the same node. Multi-card grids must use the same class. */
+    .card-ink {
+      background: var(--ink);
+      color: var(--paper);
+      padding: var(--sp-8);
+    }
+    .card-ink .t-cat,
+    .card-ink .t-meta,
+    .card-ink .lead,
+    .card-ink .body,
+    .card-ink .h-md { color: var(--paper); }
+    .card-accent {
+      background: var(--accent);
+      color: var(--accent-on);
+      padding: var(--sp-8);
+    }
+    .card-accent .t-cat,
+    .card-accent .t-meta,
+    .card-accent .lead,
+    .card-accent .body,
+    .card-accent .h-md { color: var(--accent-on); }
+    .card-fill {
+      background: var(--grey-1);
+      color: var(--ink);
+      padding: var(--sp-8);
+    }
+    .card-outlined {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--grey-2);
+      padding: var(--sp-8);
+    }
+
+    /* ---------- 9. Frame containers (image holders) ---------- */
+    .frame-img {
+      position: relative;
+      overflow: hidden;
+      background: var(--grey-1);
+      display: block;
+      margin: 0;
+    }
+    .frame-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 35%;
+      display: block;
+    }
+    .frame-img.fit-contain img { object-fit: contain; background: var(--paper); }
+    .frame-img.r-3x4   { aspect-ratio: 3 / 4; }
+    .frame-img.r-1x1   { aspect-ratio: 1 / 1; }
+    .frame-img.r-4x3   { aspect-ratio: 4 / 3; }
+    .frame-img.r-16x9  { aspect-ratio: 16 / 9; }
+    .frame-img.r-16x10 { aspect-ratio: 16 / 10; }
+    .frame-img.r-21x9  { aspect-ratio: 21 / 9; }
+    .swiss-img-caption {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 18px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--grey-3);
+      margin-top: var(--sp-5);
+    }
+
+    /* ---------- 9b. Screenshot treatment (.frame-shot) ---------- */
+    /* Swiss is stricter than Editorial: corners default square, shadows default
+       none. Override only when the shot must literally float off the page.   */
+    .frame-shot {
+      position: relative;
+      overflow: hidden;
+      display: block;
+      margin: 0;
+      background: var(--grey-1);
+      border-radius: 0;
+    }
+    .frame-shot.corners-sq { border-radius: 0; }
+    .frame-shot.corners-sm { border-radius: 4px; }
+    .frame-shot.corners-md { border-radius: 10px; }
+
+    /* Swiss shadows are flat — only the subtle outline scrim is welcome */
+    .frame-shot.shadow-soft { box-shadow: 0 12px 28px -16px rgba(0,0,0,.18); }
+    .frame-shot.shadow-ed   { box-shadow: 0 20px 40px -20px rgba(0,0,0,.22), 0 0 0 1px var(--grey-2); }
+
+    /* background tones — pure / dot / grid only. No accent colour fills. */
+    .frame-shot.bg-paper    { background: var(--paper); }
+    .frame-shot.bg-grey-1   { background: var(--grey-1); }
+    .frame-shot.bg-ink      { background: var(--ink); }
+    .frame-shot.bg-grid     {
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(to right, var(--grey-2) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grey-2) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .frame-shot.bg-dot {
+      background-color: var(--paper);
+      background-image: radial-gradient(var(--grey-2) 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+
+    /* asset backgrounds — ported from PPT skill, real texture for screenshot wells.
+       Use ONLY when current accent matches the asset's accent (don't mix oranges and IKB). */
+    .frame-shot.bg-asset-ikb-dot          { background: #0c1a3a url("../assets/screenshot-backgrounds/style-b/ikb-dot-gradient.webp")       center/cover no-repeat; }
+    .frame-shot.bg-asset-lemon-green-dot  { background: #d6e08a url("../assets/screenshot-backgrounds/style-b/lemon-green-dot-shadow.webp") center/cover no-repeat; }
+    .frame-shot.bg-asset-lemon-grid       { background: #e6e9b8 url("../assets/screenshot-backgrounds/style-b/lemon-grid.webp")             center/cover no-repeat; }
+    .frame-shot.bg-asset-safety-orange    { background: #ff5b1f url("../assets/screenshot-backgrounds/style-b/safety-orange-halftone.webp") center/cover no-repeat; }
+
+    .frame-shot.inset-none > img,
+    .frame-shot.inset-none > .shot-body { padding: 0; }
+    .frame-shot.inset-sub  { padding: 20px; }
+    .frame-shot.inset-bal  { padding: 48px; }
+
+    .frame-shot.r-3x4   { aspect-ratio: 3 / 4; }
+    .frame-shot.r-1x1   { aspect-ratio: 1 / 1; }
+    .frame-shot.r-4x3   { aspect-ratio: 4 / 3; }
+    .frame-shot.r-16x9  { aspect-ratio: 16 / 9; }
+    .frame-shot.r-16x10 { aspect-ratio: 16 / 10; }
+    .frame-shot.r-21x9  { aspect-ratio: 21 / 9; }
+    .frame-shot.r-3x2   { aspect-ratio: 3 / 2; }
+
+    .frame-shot > img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      border-radius: inherit;
+    }
+    .frame-shot.fit-cover > img { object-fit: cover; }
+
+    /* device chrome — CSS-only, no SVG */
+    .device-browser {
+      position: relative;
+      background: var(--paper);
+      border: 1px solid var(--grey-2);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .device-browser::before {
+      content: '';
+      display: block;
+      height: 32px;
+      background: var(--grey-1);
+      border-bottom: 1px solid var(--grey-2);
+      background-image:
+        radial-gradient(circle at 16px 16px, var(--grey-3) 4px, transparent 4.5px),
+        radial-gradient(circle at 34px 16px, var(--grey-3) 4px, transparent 4.5px),
+        radial-gradient(circle at 52px 16px, var(--grey-3) 4px, transparent 4.5px);
+    }
+    .device-browser > .frame-shot,
+    .device-browser > img {
+      border-radius: 0;
+      display: block;
+      width: 100%;
+    }
+    .device-phone {
+      position: relative;
+      background: var(--ink);
+      border-radius: 28px;
+      padding: 12px;
+      box-shadow: 0 16px 36px -18px rgba(0,0,0,.32);
+    }
+    .device-phone > .frame-shot,
+    .device-phone > img {
+      border-radius: 18px;
+      display: block;
+      width: 100%;
+    }
+
+    /* ---------- 9c. Map block (.map-block) ---------- */
+    /* Static map for Swiss decks. Pins are pure HTML, no SVG text.
+       Use accent sparingly: at most one accent pin per board. */
+    .map-block {
+      position: relative;
+      background: var(--grey-1);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      width: 100%;
+    }
+    .map-block.r-16x10 { aspect-ratio: 16 / 10; }
+    .map-block.r-16x9  { aspect-ratio: 16 / 9; }
+    .map-block.r-1x1   { aspect-ratio: 1 / 1; }
+    .map-block.r-3x4   { aspect-ratio: 3 / 4; }
+    .map-block > img,
+    .map-block > svg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      display: block;
+    }
+    .map-block > img { object-fit: cover; }
+    /* desaturated tile filter to keep Swiss strict tone */
+    .map-block.tone-paper > img { filter: saturate(0) contrast(1.05) brightness(1.02); }
+    .map-block.tone-ink > img   { filter: saturate(0) brightness(.58); }
+    /* schematic SVG defaults */
+    .map-block > svg .map-coast { fill: none; stroke: var(--grey-2); stroke-width: .4; }
+    .map-block > svg .map-road  { fill: none; stroke: var(--grey-3); stroke-width: .28; stroke-dasharray: 1.2 .8; opacity: .7; }
+    .map-block > svg .map-water { fill: var(--grey-1); }
+    .map-block > svg .map-grid  { stroke: var(--grey-2); stroke-width: .15; opacity: .5; }
+
+    .map-pin {
+      position: absolute;
+      width: 0; height: 0;
+      transform: translate(-50%, -50%);
+    }
+    .map-pin .dot {
+      position: absolute;
+      left: -6px; top: -6px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--ink);
+      border: 2px solid var(--paper);
+      box-shadow: 0 1px 3px rgba(0,0,0,.22);
+    }
+    .map-pin.accent .dot { background: var(--accent); }
+    .map-pin .line {
+      position: absolute;
+      left: 7px; top: 0;
+      width: 28px; height: 1px;
+      background: var(--ink);
+      opacity: .55;
+    }
+    .map-pin.left .line { left: auto; right: 7px; }
+    .map-pin .card {
+      position: absolute;
+      left: 38px; top: -20px;
+      min-width: 80px;
+      padding: 8px 10px;
+      background: rgba(250,250,248,.94);
+      box-shadow: 0 0 0 1px var(--grey-2);
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+    .map-pin.left .card { left: auto; right: 38px; }
+    .map-pin .card .name {
+      font-family: var(--sans-zh), var(--sans);
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+    .map-pin .card .meta {
+      display: block;
+      margin-top: 4px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--grey-3);
+    }
+    .map-pin.accent .card .name { color: var(--accent); }
+
+    .map-legend {
+      position: absolute;
+      left: 14px; bottom: 14px;
+      z-index: 3;
+      background: rgba(250,250,248,.94);
+      padding: 8px 12px;
+      box-shadow: 0 0 0 1px var(--grey-2);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--grey-3);
+    }
+    .map-legend.tr { left: auto; right: 14px; top: 14px; bottom: auto; }
+
+    /* ---------- 10. Swiss-specific components ---------- */
+
+    /* S08 Image Hero (port of S22) */
+    .image-hero {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: var(--sp-7);
+      height: 100%;
+    }
+    .image-hero .hero-img-wrap {
+      position: relative;
+      overflow: hidden;
+      background: var(--grey-1);
+    }
+    .image-hero .hero-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 35%;
+      display: block;
+    }
+    .image-hero .hero-overlay-block {
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: var(--paper);
+      padding: var(--sp-7) var(--sp-8);
+      max-width: 60%;
+    }
+    .image-hero .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-8);
+      align-items: end;
+      border-top: 1px solid var(--grey-2);
+      padding-top: var(--sp-7);
+    }
+    .image-hero .hero-stats .stat-block .num {
+      font-family: var(--sans);
+      font-weight: 200;
+      font-size: 96px;
+      line-height: 1;
+      letter-spacing: -.02em;
+      color: var(--ink);
+      margin: 0 0 var(--sp-4);
+    }
+    .image-hero .hero-stats .stat-block .lbl {
+      font-family: var(--mono);
+      font-size: 18px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--grey-3);
+      margin: 0;
+    }
+
+    /* S09 KPI Tower (port of S06) */
+    .kpi-tower-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-7);
+      align-items: end;
+      height: 100%;
+    }
+    .kpi-tower-row .tower-col {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-5);
+      align-items: flex-start;
+    }
+    .kpi-tower-row .tower-col .num {
+      font-family: var(--sans);
+      font-weight: 200;
+      font-size: 112px;
+      line-height: 1;
+      letter-spacing: -.02em;
+      margin: 0;
+    }
+    .kpi-tower-row .tower-col .lbl {
+      font-family: var(--mono);
+      font-size: 20px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--grey-3);
+      margin: 0;
+    }
+    .kpi-tower-row .tower-col .bar-tower {
+      width: 100%;
+      height: var(--h, 240px);
+      background: var(--accent);
+      transform-origin: bottom;
+    }
+    .kpi-tower-row .tower-col.muted .bar-tower {
+      background: var(--grey-2);
+    }
+    .poster.xhs .kpi-tower-row { grid-template-columns: 1fr 1fr; gap: var(--sp-9); }
+    .poster.square .kpi-tower-row { grid-template-columns: 1fr 1fr; gap: var(--sp-9); }
+
+    /* S10 H-Bar Chart (port of S07) */
+    .h-bar-chart {
+      display: grid;
+      gap: var(--sp-6);
+    }
+    .h-bar-chart .bar-row {
+      display: grid;
+      grid-template-columns: 220px 1fr 120px;
+      gap: var(--sp-6);
+      align-items: center;
+    }
+    .h-bar-chart .bar-row .row-lbl {
+      font-family: var(--sans-zh);
+      font-weight: 500;
+      font-size: 26px;
+      color: var(--ink);
+    }
+    .h-bar-chart .bar-row .row-track {
+      position: relative;
+      height: 28px;
+      background: var(--grey-1);
+    }
+    .h-bar-chart .bar-row .row-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--w, 50%);
+      background: var(--accent);
+    }
+    .h-bar-chart .bar-row .row-val {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 26px;
+      letter-spacing: .04em;
+      text-align: right;
+      color: var(--ink);
+    }
+    /* On portrait the labels move above the track */
+    .poster.xhs .h-bar-chart .bar-row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-4);
+    }
+    .poster.xhs .h-bar-chart .bar-row .row-val {
+      text-align: left;
+    }
+
+    /* S11 Stacked Ledger (port of S20) */
+    .stacked-ledger {
+      display: flex;
+      flex-direction: column;
+    }
+    .stacked-ledger .ledger-row {
+      display: grid;
+      grid-template-columns: 280px 1fr auto;
+      gap: var(--sp-7);
+      align-items: baseline;
+      padding: var(--sp-7) 0;
+      border-bottom: 1px solid var(--grey-2);
+    }
+    .stacked-ledger .ledger-row:first-child { padding-top: 0; }
+    .stacked-ledger .ledger-row:last-child  { border-bottom: 0; }
+    .stacked-ledger .ledger-num {
+      font-family: var(--sans);
+      font-weight: 200;
+      font-size: 112px;
+      line-height: 1;
+      letter-spacing: -.02em;
+      margin: 0;
+    }
+    .stacked-ledger .ledger-lbl {
+      font-family: var(--sans-zh);
+      font-weight: 500;
+      font-size: 30px;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+    .stacked-ledger .ledger-lbl .sub {
+      display: block;
+      font-weight: 400;
+      font-size: 22px;
+      color: var(--grey-3);
+      margin-top: var(--sp-3);
+    }
+    .stacked-ledger .ledger-icn {
+      width: 56px;
+      height: 56px;
+      color: var(--accent);
+    }
+    .poster.square .stacked-ledger .ledger-num { font-size: 88px; }
+    .poster.square .stacked-ledger .ledger-row { grid-template-columns: 220px 1fr auto; }
+
+    /* S12 Matrix Fill (port of S15) */
+    .matrix-fill {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 1fr;
+      gap: var(--sp-5);
+    }
+    .matrix-fill .matrix-cell {
+      background: var(--grey-1);
+      padding: var(--sp-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-4);
+      min-height: 160px;
+    }
+    .matrix-fill .matrix-cell .cell-nb {
+      font-family: var(--mono);
+      font-size: 18px;
+      letter-spacing: .12em;
+      color: var(--grey-3);
+    }
+    .matrix-fill .matrix-cell .cell-title {
+      font-family: var(--sans-zh);
+      font-weight: 500;
+      font-size: 26px;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+    .matrix-fill .matrix-cell.is-accent {
+      background: var(--accent);
+      color: var(--accent-on);
+    }
+    .matrix-fill .matrix-cell.is-accent .cell-nb,
+    .matrix-fill .matrix-cell.is-accent .cell-title { color: var(--accent-on); }
+    .hero-stat-bottom {
+      margin-top: var(--sp-9);
+      padding-top: var(--sp-7);
+      border-top: 1px solid var(--grey-2);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: var(--sp-7);
+    }
+    /* xhs uses 2 columns; up to 8 cells = 4 rows. Switch to min-content
+       so rows don't stretch and crowd out hero-stat-bottom (validated
+       in smoke-ai-tools/xhs-04). When pairing matrix-fill with
+       hero-stat-bottom inside .poster.xhs, prefer 6 cells (3 rows). */
+    .poster.xhs .matrix-fill {
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: min-content;
+      gap: var(--sp-4);
+    }
+    .poster.xhs .matrix-fill .matrix-cell { min-height: 0; padding: var(--sp-5); }
+    .poster.xhs .matrix-fill .matrix-cell .cell-title { font-size: 24px; }
+    .poster.xhs .hero-stat-bottom {
+      margin-top: var(--sp-6);
+      padding-top: var(--sp-5);
+      align-items: center;
+    }
+    .poster.xhs .hero-stat-bottom .num-mega { font-size: 128px; line-height: 1; }
+    .poster.square .matrix-fill{ grid-template-columns: repeat(3, 1fr); grid-auto-rows: auto; }
+    .poster.square .matrix-fill .matrix-cell { min-height: 0; }
+
+    /* ---------- DSH Agent Mesh task layer ---------- */
+    .task-cover { background: var(--accent); color: var(--accent-on); }
+    .task-cover .content { padding-top: var(--sp-11); padding-bottom: var(--sp-11); }
+    .task-cover .chrome-min { border-color: rgba(255,255,255,.34); color: rgba(255,255,255,.76); }
+    .task-cover .t-cat,
+    .task-cover .t-meta,
+    .task-cover .lead,
+    .task-cover .h-statement { color: var(--accent-on); }
+    .task-cover .accent-word { color: var(--accent-on); text-decoration: underline; text-decoration-thickness: 5px; text-underline-offset: 12px; }
+    .cover-map { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
+    .cover-node { min-height: 164px; padding: var(--sp-6); border: 1px solid rgba(255,255,255,.46); display: flex; flex-direction: column; justify-content: space-between; }
+    .cover-node .node-label { font-family: var(--mono); font-size: 18px; letter-spacing: .14em; color: rgba(255,255,255,.72); }
+    .cover-node .node-title { font-family: var(--sans-zh); font-size: 30px; line-height: 1.25; font-weight: 500; color: var(--accent-on); }
+    .cover-foot { display: grid; gap: var(--sp-5); }
+    .cover-foot .hr-accent { background: var(--accent-on); }
+    .cover-bottom-rail { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-5); padding-top: var(--sp-5); border-top: 1px solid rgba(255,255,255,.34); }
+    .cover-bottom-rail .rail-label { font-family: var(--mono); font-size: 17px; letter-spacing: .12em; color: rgba(255,255,255,.72); }
+    .cover-bottom-rail .rail-copy { display: block; margin-top: var(--sp-3); font-family: var(--sans-zh); font-size: 22px; line-height: 1.25; color: var(--accent-on); }
+    .cover-command { display: grid; grid-template-columns: 120px 1fr; gap: var(--sp-5); padding-top: var(--sp-5); border-top: 1px solid rgba(255,255,255,.34); align-items: baseline; }
+    .cover-command .command-label { font-family: var(--mono); font-size: 17px; letter-spacing: .12em; color: rgba(255,255,255,.72); }
+    .cover-command code { font-family: var(--mono); font-size: 20px; line-height: 1.4; color: var(--accent-on); white-space: normal; }
+
+    .warning-rows { display: grid; border-top: 1px solid var(--grey-2); }
+    .warning-row { display: grid; grid-template-columns: 140px 1fr; gap: var(--sp-7); padding: var(--sp-7) 0; border-bottom: 1px solid var(--grey-2); }
+    .warning-row .row-nb { font-family: var(--mono); font-size: 22px; letter-spacing: .12em; color: var(--accent); }
+    .warning-row .row-title { font-family: var(--sans-zh); font-size: 34px; line-height: 1.25; font-weight: 500; margin: 0 0 var(--sp-4); }
+    .warning-row .row-note { font-family: var(--sans-zh); font-size: 26px; line-height: 1.45; color: var(--grey-3); margin: 0; }
+    .task-note { border-left: 4px solid var(--accent); padding-left: var(--sp-6); }
+    .task-note .lead { margin: 0; }
+    .signal-rail { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); padding-top: var(--sp-5); border-top: 1px solid var(--grey-2); }
+    .signal-rail > div { border-top: 3px solid var(--accent); padding-top: var(--sp-4); }
+    .signal-rail .signal-copy { margin: var(--sp-3) 0 0; font-family: var(--sans-zh); font-size: 22px; line-height: 1.3; }
+
+    .arch-stack { display: grid; border-top: 1px solid var(--grey-2); }
+    .arch-row { display: grid; grid-template-columns: 80px 230px 1fr; gap: var(--sp-7); align-items: center; min-height: 190px; padding: var(--sp-7) 0; border-bottom: 1px solid var(--grey-2); }
+    .arch-row .arch-nb { font-family: var(--mono); font-size: 22px; color: var(--accent); letter-spacing: .12em; }
+    .arch-row .arch-label { font-family: var(--sans-zh); font-size: 34px; font-weight: 500; line-height: 1.2; }
+    .arch-row .arch-copy { font-family: var(--sans-zh); font-size: 26px; line-height: 1.5; color: var(--grey-3); }
+    .arch-row.accent-row { background: var(--accent); color: var(--accent-on); padding-left: var(--sp-6); padding-right: var(--sp-6); border-bottom: 0; }
+    .arch-row.accent-row .arch-nb,
+    .arch-row.accent-row .arch-copy { color: rgba(255,255,255,.82); }
+    .arch-row.accent-row .arch-label { color: var(--accent-on); }
+    .boundary-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); padding-top: var(--sp-6); }
+    .boundary-strip > div { border-top: 3px solid var(--ink); padding-top: var(--sp-4); }
+    .boundary-strip .t-meta { letter-spacing: .08em; }
+
+    .selector-proof { display: grid; gap: var(--sp-7); }
+    .proof-shot { width: 100%; }
+    .proof-shot img { object-position: center center; }
+    .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
+    .proof-cell { border-top: 3px solid var(--accent); padding-top: var(--sp-4); }
+    .proof-cell .proof-title { font-family: var(--sans-zh); font-size: 27px; font-weight: 500; line-height: 1.25; margin: 0 0 var(--sp-3); }
+    .proof-cell .proof-copy { font-family: var(--sans-zh); font-size: 22px; line-height: 1.45; color: var(--grey-3); margin: 0; }
+
+    .stacked-ledger .ledger-row .ledger-num { font-size: 92px; }
+    .stacked-ledger .ledger-row { grid-template-columns: 230px 1fr 48px; padding: var(--sp-6) 0; }
+    .stacked-ledger .ledger-lbl { font-size: 28px; }
+    .stacked-ledger .ledger-lbl .sub { font-size: 21px; }
+    .task-closing { display: grid; gap: var(--sp-5); padding-top: var(--sp-5); border-top: 3px solid var(--accent); }
+    .task-closing .lead { margin: 0; }
+
+    .task-cover-map { margin-top: var(--sp-4); }
+    .task-ledger-page .content,
+    .task-matrix-page .content { gap: var(--sp-6); }
+    .task-ledger-page .stacked-ledger .ledger-row { padding-top: var(--sp-5); padding-bottom: var(--sp-5); }
+    .task-matrix-page .matrix-fill .matrix-cell { padding: var(--sp-5); }
+    .task-matrix-page .matrix-fill .matrix-cell .cell-title { font-size: 22px; }
+    .task-matrix-page .hero-stat-bottom { margin-top: var(--sp-5); }
+    .task-matrix-page .hero-stat-bottom .num-mega { font-size: 112px; }
+    .task-ledger-page .stacked-ledger .ledger-row .ledger-num { font-size: 80px; }
+    .task-ledger-page .stacked-ledger .ledger-lbl { font-size: 26px; }
+    .task-ledger-page .stacked-ledger .ledger-lbl .sub { font-size: 20px; }
+    .task-ledger-page .task-closing .lead { font-size: 26px; }
+    @media (max-width: 720px) {
+      .arch-row { grid-template-columns: 52px 1fr; }
+      .arch-row .arch-copy { grid-column: 2; }
+      .warning-row { grid-template-columns: 96px 1fr; }
+      .cover-map, .proof-grid, .boundary-strip { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- 11. Issue label + corner metadata ---------- */
+    .chrome-min {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 18px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--grey-3);
+      padding-bottom: var(--sp-6);
+      border-bottom: 1px solid var(--grey-2);
+      margin-bottom: var(--sp-9);
+    }
+
+    /* ---------- 12. Pair preview frame ---------- */
+    .pair-preview {
+      width: 2400px;
+      min-height: 1180px;
+      background: var(--grey-1);
+      padding: var(--sp-9);
+      display: grid;
+      grid-template-columns: 2100px 1080px;
+      grid-template-rows: 900px 1080px;
+      gap: var(--sp-9);
+      align-content: center;
+      justify-content: center;
+    }
+    .pair-preview .preview-wide   { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
+    .pair-preview .preview-square { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+    .pair-preview .preview-label {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 18px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--grey-3);
+      margin-bottom: var(--sp-5);
+    }
+
+    /* =========================================================
+       DSH Agent Mesh — Soviet Cold War BUILDING-SYSTEM layer
+       ---------------------------------------------------------
+       Guizang supplies the social-card production discipline; this
+       task layer translates the set into one original structured-system
+       poster language: aged paper, navy infrastructure, red action marks,
+       ochre supports, hard platforms, small workers, and no UI-card wall.
+       ========================================================= */
+    :root {
+      --soviet-black: #11151C;
+      --soviet-paper: #E7D3A9;
+      --soviet-cream: #F3EBDD;
+      --soviet-red: #D9342B;
+      --soviet-blue: #163B72;
+      --soviet-cold: #2E6C9E;
+      --soviet-yellow: #E9B83F;
+      --soviet-orange: #E25C2C;
+      --soviet-olive: #58684D;
+      --soviet-brown: #7C3028;
+      --soviet-grey: #3F4B58;
+      --paper: var(--soviet-paper);
+      --ink: var(--soviet-black);
+      --grey-1: var(--soviet-cream);
+      --grey-2: rgba(17, 21, 28, .38);
+      --grey-3: #3F4B58;
+      --accent: var(--soviet-red);
+      --accent-on: var(--soviet-cream);
+    }
+
+    body { background: var(--soviet-black); }
+    .poster.soviet {
+      background: var(--soviet-paper);
+      color: var(--soviet-black);
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .poster.soviet.deep {
+      background: var(--soviet-blue);
+      color: var(--soviet-cream);
+    }
+    .poster.soviet .content {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 76px 84px 68px;
+    }
+    .poster.soviet .chrome-min {
+      flex: none;
+      margin: 0 0 44px;
+      padding: 0 0 16px;
+      border-bottom: 2px solid currentColor;
+      color: currentColor;
+      opacity: .9;
+      font-family: var(--mono);
+      font-size: 18px;
+      line-height: 1.1;
+      letter-spacing: .15em;
+    }
+    .poster.soviet .chrome-min > span:last-child { color: var(--soviet-red); }
+    .poster.soviet.deep .chrome-min > span:last-child { color: var(--soviet-yellow); }
+    .soviet-kicker {
+      margin: 0;
+      color: var(--soviet-red);
+      font-family: var(--mono);
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .deep .soviet-kicker { color: var(--soviet-yellow); }
+    .soviet-title {
+      margin: 0;
+      color: var(--soviet-black);
+      font-family: "Arial Narrow", "Helvetica Neue", "Noto Sans SC", sans-serif;
+      font-size: 92px;
+      font-weight: 700;
+      line-height: .98;
+      letter-spacing: -.045em;
+    }
+    .deep .soviet-title { color: var(--soviet-cream); }
+    .soviet-title .red { color: var(--soviet-red); }
+    .deep .soviet-title .red { color: var(--soviet-yellow); }
+    .soviet-subtitle,
+    .soviet-lead,
+    .soviet-note {
+      margin: 0;
+      font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+    }
+    .soviet-lead {
+      max-width: 720px;
+      color: var(--soviet-black);
+      font-size: 30px;
+      font-weight: 500;
+      line-height: 1.38;
+    }
+    .deep .soviet-lead { color: var(--soviet-cream); }
+    .soviet-note {
+      color: var(--soviet-grey);
+      font-size: 25px;
+      line-height: 1.45;
+    }
+    .deep .soviet-note { color: rgba(243, 235, 221, .82); }
+    .soviet-rule {
+      width: 96px;
+      height: 9px;
+      margin: 0;
+      border: 0;
+      background: var(--soviet-red);
+    }
+    .deep .soviet-rule { background: var(--soviet-yellow); }
+    .soviet-meta {
+      color: currentColor;
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .soviet-foot {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 24px;
+      margin-top: auto;
+      padding-top: 22px;
+      border-top: 2px solid currentColor;
+      color: currentColor;
+    }
+    .soviet-foot .soviet-meta { white-space: nowrap; }
+    .soviet-foot .soviet-note { font-size: 22px; }
+
+    /* One continuous public-system silhouette, not a set of UI cards. */
+    .soviet-system,
+    .soviet-arch {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      flex: none;
+      background: var(--soviet-cream);
+      border-top: 8px solid var(--soviet-blue);
+      border-bottom: 8px solid var(--soviet-blue);
+    }
+    .soviet-system { height: 468px; }
+    .soviet-arch { height: 586px; background: var(--soviet-blue); border-color: var(--soviet-cream); }
+    .soviet-system .terrain,
+    .soviet-arch .terrain {
+      position: absolute;
+      left: -4%;
+      right: -4%;
+      bottom: 0;
+      height: 112px;
+      background: var(--soviet-olive);
+      clip-path: polygon(0 62%, 12% 48%, 22% 57%, 34% 31%, 47% 49%, 61% 20%, 74% 46%, 87% 27%, 100% 44%, 100% 100%, 0 100%);
+      z-index: 1;
+    }
+    .soviet-system .road,
+    .soviet-arch .road {
+      position: absolute;
+      left: -6%;
+      right: 16%;
+      bottom: 32px;
+      height: 14px;
+      background: var(--soviet-yellow);
+      transform: skewX(-28deg);
+      z-index: 2;
+    }
+    .soviet-system .platform,
+    .soviet-arch .platform {
+      position: absolute;
+      height: 22px;
+      background: var(--soviet-blue);
+      transform: skewX(-12deg);
+      z-index: 4;
+    }
+    .soviet-system .platform.p1 { left: 25%; right: -6%; bottom: 128px; }
+    .soviet-system .platform.p2 { left: 38%; width: 58%; bottom: 218px; }
+    .soviet-system .platform.p3 { left: 52%; width: 43%; bottom: 305px; }
+    .soviet-system .platform.p4 { left: 68%; width: 30%; bottom: 382px; }
+    .soviet-arch .platform { background: var(--soviet-cream); height: 30px; }
+    .soviet-arch .platform.p1 { left: 9%; right: -5%; bottom: 112px; }
+    .soviet-arch .platform.p2 { left: 21%; width: 70%; bottom: 232px; }
+    .soviet-arch .platform.p3 { left: 36%; width: 57%; bottom: 352px; }
+    .soviet-arch .platform.p4 { left: 55%; width: 40%; bottom: 474px; }
+    .soviet-system .support,
+    .soviet-arch .support {
+      position: absolute;
+      top: 12%;
+      width: 15px;
+      background: var(--soviet-yellow);
+      z-index: 3;
+    }
+    .soviet-system .support.s1 { left: 57%; height: 76%; }
+    .soviet-system .support.s2 { left: 82%; top: 28%; height: 60%; background: var(--soviet-orange); }
+    .soviet-arch .support { top: 9%; background: var(--soviet-red); }
+    .soviet-arch .support.s1 { left: 30%; height: 80%; }
+    .soviet-arch .support.s2 { left: 73%; top: 24%; height: 64%; background: var(--soviet-yellow); }
+    .soviet-system .link,
+    .soviet-arch .link {
+      position: absolute;
+      left: 32%;
+      bottom: 286px;
+      width: 54%;
+      height: 7px;
+      background: var(--soviet-red);
+      transform: rotate(-17deg);
+      transform-origin: left center;
+      z-index: 5;
+    }
+    .soviet-arch .link { left: 28%; bottom: 284px; width: 60%; background: var(--soviet-yellow); }
+    .soviet-system .system-label,
+    .soviet-arch .system-label {
+      position: absolute;
+      z-index: 6;
+      color: var(--soviet-blue);
+      font-family: var(--mono);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: .13em;
+    }
+    .soviet-system .system-label.l1 { left: 6%; top: 13%; }
+    .soviet-system .system-label.l2 { left: 6%; top: 22%; }
+    .soviet-system .system-label.l3 { left: 6%; top: 31%; }
+    .soviet-system .system-label.l4 { left: 6%; top: 40%; }
+    .soviet-arch .system-label { color: var(--soviet-cream); }
+    .soviet-arch .system-label.l1 { left: 6%; top: 13%; }
+    .soviet-arch .system-label.l2 { left: 6%; top: 31%; }
+    .soviet-arch .system-label.l3 { left: 6%; top: 49%; }
+    .soviet-system .worker,
+    .soviet-arch .worker {
+      position: absolute;
+      width: 10px;
+      height: 54px;
+      background: var(--soviet-red);
+      z-index: 7;
+    }
+    .soviet-system .worker::before,
+    .soviet-arch .worker::before {
+      content: "";
+      position: absolute;
+      left: -5px;
+      top: -18px;
+      width: 20px;
+      height: 20px;
+      background: currentColor;
+    }
+    .soviet-system .worker { color: var(--soviet-red); }
+    .soviet-arch .worker { color: var(--soviet-yellow); background: var(--soviet-yellow); }
+    .soviet-system .worker.w1 { left: 43%; bottom: 231px; }
+    .soviet-system .worker.w2 { left: 64%; bottom: 318px; background: var(--soviet-orange); color: var(--soviet-orange); }
+    .soviet-system .worker.w3 { left: 75%; bottom: 395px; }
+    .soviet-system .worker.w4 { left: 88%; bottom: 143px; background: var(--soviet-blue); color: var(--soviet-blue); }
+    .soviet-arch .worker.w1 { left: 28%; bottom: 247px; }
+    .soviet-arch .worker.w2 { left: 57%; bottom: 368px; }
+    .soviet-arch .worker.w3 { left: 77%; bottom: 128px; }
+    .soviet-arch .worker.w4 { left: 86%; bottom: 489px; }
+
+    .cover-intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 214px;
+      gap: 38px;
+      align-items: start;
+      flex: none;
+    }
+    .cover-intro .soviet-title { margin-top: 18px; }
+    .cover-intro .soviet-lead { margin-top: 24px; }
+    .cover-stamp {
+      margin-top: 4px;
+      padding: 14px 0 14px 18px;
+      border-left: 12px solid var(--soviet-red);
+      color: var(--soviet-blue);
+      font-family: var(--mono);
+      font-size: 19px;
+      font-weight: 600;
+      line-height: 1.45;
+      letter-spacing: .06em;
+    }
+    .cover-stamp strong {
+      display: block;
+      color: var(--soviet-red);
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: -.02em;
+    }
+    .cover-system { margin-top: 40px; }
+    .cover-rail {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      flex: none;
+      margin-top: 22px;
+      padding-top: 16px;
+      min-height: 108px;
+      border-top: 2px solid var(--soviet-blue);
+      align-items: center;
+      background: var(--soviet-cream);
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .cover-rail > div { min-width: 0; }
+    .cover-rail .soviet-meta { display: block; color: var(--soviet-blue); }
+    .cover-rail .soviet-note { display: block; margin-top: 7px; font-size: 21px; line-height: 1.2; }
+
+    .problem-intro { flex: none; }
+    .problem-intro .soviet-title { margin-top: 18px; }
+    .problem-intro .soviet-lead { margin-top: 22px; }
+    .problem-bars {
+      display: flex;
+      flex-direction: column;
+      flex: none;
+      margin-top: 44px;
+    }
+    .problem-row {
+      display: grid;
+      grid-template-columns: 140px 220px minmax(0, 1fr);
+      column-gap: 20px;
+      align-items: center;
+      min-height: 160px;
+      border-top: 2px solid var(--soviet-cream);
+      background: var(--soviet-cold);
+    }
+    .problem-row:last-child { border-bottom: 2px solid var(--soviet-cream); }
+    .problem-row .problem-index {
+      color: var(--soviet-yellow);
+      font-family: var(--mono);
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: .05em;
+    }
+    .problem-row .problem-title {
+      color: var(--soviet-cream);
+      font-family: "Arial Narrow", "Noto Sans SC", sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1.05;
+    }
+    .problem-row .problem-copy {
+      max-width: 440px;
+      color: rgba(243,235,221,.82);
+      font-family: "Noto Sans SC", sans-serif;
+      font-size: 26px;
+      line-height: 1.38;
+    }
+    .problem-note {
+      display: grid;
+      grid-template-columns: 10px 1fr;
+      align-items: center;
+      gap: 18px;
+      flex: none;
+      margin-top: 30px;
+    }
+    .problem-note::before { content: ""; display: block; height: 72px; background: var(--soviet-red); }
+    .problem-rail {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      flex: none;
+      min-height: 170px;
+      margin-top: 24px;
+      padding: 22px 26px 26px;
+      border-top: 2px solid var(--soviet-cream);
+      border-bottom: 12px solid var(--soviet-yellow);
+      align-items: center;
+      background: var(--soviet-cold);
+    }
+    .problem-rail .soviet-meta { display: block; color: var(--soviet-yellow); }
+    .problem-rail .soviet-note { margin-top: 7px; color: var(--soviet-cream); font-size: 22px; }
+
+    .arch-intro { flex: none; }
+    .arch-intro .soviet-title { margin-top: 16px; }
+    .arch-intro .soviet-lead { margin-top: 20px; }
+    .arch-stage { margin-top: 42px; }
+    .arch-captions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      flex: none;
+      min-height: 180px;
+      margin-top: 22px;
+      padding: 20px;
+      border-top: 2px solid var(--soviet-cream);
+      align-items: center;
+      background: var(--soviet-cream);
+    }
+    .arch-captions .soviet-meta { display: block; color: var(--soviet-yellow); }
+    .arch-captions .soviet-note { margin-top: 7px; font-size: 22px; }
+
+    .evidence-intro { flex: none; }
+    .evidence-intro .soviet-title { margin-top: 16px; }
+    .evidence-intro .soviet-lead { margin-top: 20px; }
+    .evidence-frame {
+      position: relative;
+      flex: none;
+      height: 520px;
+      margin-top: 38px;
+      padding: 18px;
+      overflow: hidden;
+      background: var(--soviet-blue);
+      border: 12px solid var(--soviet-red);
+    }
+    .evidence-frame img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center 50%;
+      background: var(--soviet-cream);
+    }
+    .evidence-callout {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      padding: 8px 16px;
+      background: var(--soviet-red);
+      color: var(--soviet-cream);
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: .12em;
+    }
+    .evidence-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      flex: none;
+      min-height: 150px;
+      margin-top: 22px;
+      padding: 20px 24px;
+      border-top: 2px solid var(--soviet-cream);
+      align-items: center;
+    }
+    .evidence-steps .soviet-meta { display: block; color: var(--soviet-yellow); }
+    .evidence-steps .soviet-note { margin-top: 7px; font-size: 22px; }
+    .evidence-principle {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      flex: none;
+      min-height: 170px;
+      padding: 20px 24px;
+      border-top: 2px solid var(--soviet-cream);
+      border-bottom: 12px solid var(--soviet-red);
+      align-items: center;
+      background: var(--soviet-cold);
+    }
+    .evidence-principle .soviet-meta { color: var(--soviet-yellow); }
+    .evidence-principle .soviet-note { margin-top: 5px; color: var(--soviet-cream); font-size: 21px; }
+
+    .actions-intro { flex: none; }
+    .actions-intro .soviet-title { margin-top: 16px; }
+    .actions-intro .soviet-lead { margin-top: 20px; }
+    .action-list {
+      display: flex;
+      flex-direction: column;
+      flex: none;
+      margin-top: 38px;
+    }
+    .action-row {
+      display: grid;
+      grid-template-columns: 108px 252px minmax(0, 1fr) 42px;
+      column-gap: 24px;
+      align-items: center;
+      min-height: 150px;
+      border-top: 2px solid var(--soviet-blue);
+      padding: 0 20px;
+      background: var(--soviet-cream);
+    }
+    .action-row:last-child { border-bottom: 2px solid var(--soviet-blue); }
+    .action-row .action-index {
+      color: var(--soviet-red);
+      font-family: var(--mono);
+      font-size: 30px;
+      font-weight: 600;
+    }
+    .action-row .action-title {
+      color: var(--soviet-blue);
+      font-family: "Arial Narrow", "Noto Sans SC", sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.05;
+    }
+    .action-row .action-copy {
+      max-width: 480px;
+      color: var(--soviet-black);
+      font-family: "Noto Sans SC", sans-serif;
+      font-size: 24px;
+      line-height: 1.4;
+    }
+    .action-row .action-mark {
+      justify-self: end;
+      width: 42px;
+      height: 42px;
+      background: var(--soviet-red);
+      clip-path: polygon(0 0, 100% 0, 100% 28%, 28% 28%, 28% 100%, 0 100%);
+    }
+    .action-foundation {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      flex: none;
+      min-height: 220px;
+      margin-top: 24px;
+      padding: 24px;
+      border-top: 2px solid var(--soviet-blue);
+      border-bottom: 14px solid var(--soviet-yellow);
+      align-items: center;
+      background: var(--soviet-blue);
+    }
+    .action-foundation > div { border-left: 10px solid var(--soviet-red); padding-left: 14px; }
+    .action-foundation .soviet-meta { display: block; color: var(--soviet-yellow); }
+    .action-foundation .soviet-note { margin-top: 5px; color: var(--soviet-cream); font-size: 21px; }
+
+    .closing-intro { flex: none; }
+    .closing-intro .soviet-title { margin-top: 18px; }
+    .closing-intro .soviet-lead { margin-top: 24px; }
+    .closing-stage { margin-top: 42px; }
+    .closing-stage .platform { background: var(--soviet-cream); }
+    .closing-stage .support { background: var(--soviet-red); }
+    .closing-stage .support.s2 { background: var(--soviet-yellow); }
+    .closing-stage .link { background: var(--soviet-red); }
+    .closing-stage .system-label { color: var(--soviet-cream); }
+    .closing-rail {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 24px;
+      flex: none;
+      min-height: 170px;
+      margin-top: 22px;
+      padding: 20px 24px;
+      border-top: 2px solid var(--soviet-cream);
+      align-items: center;
+      background: var(--soviet-cold);
+    }
+    .closing-rail .soviet-meta { color: var(--soviet-yellow); }
+    .closing-rail .soviet-note { max-width: 670px; margin-top: 7px; }
+    .closing-number {
+      color: var(--soviet-cream);
+      font-family: "Arial Narrow", sans-serif;
+      font-size: 152px;
+      font-weight: 700;
+      line-height: .8;
+      letter-spacing: -.07em;
+    }
+    .soviet .frame-shot,
+    .soviet .frame-shot.shadow-soft,
+    .soviet .frame-shot.shadow-ed { border-radius: 0; box-shadow: none; }
+
+    /* ---------- 13. Hard rules (visual guard rails) ----------
+       Swiss style refuses these — uncomment to find offenders.
+    .poster *[style*="border-radius"],
+    .poster *[style*="box-shadow"],
+    .poster *[style*="linear-gradient"] { outline: 4px solid red !important; }
+    */
+  </style>
+</head>
+<body>
+  <!-- ACCENT_OVERRIDE
+       Change <html data-accent="…"> above to:
+       ikb | lemon-yellow | lemon-green | safety-orange
+       One deck — one accent. Never combine.
+  -->
+  <main class="sheet">
+
+    <!-- POSTERS_HERE -->
+    <!--
+      Replace the placeholder poster below with real content.
+      Each poster carries one Layout Recipe (S01-S12) from
+      references/layout-recipes.md.
+
+      Available board sizes:
+        <section class="poster xhs"    id="xhs-01">…</section>   3:4
+        <section class="poster square" id="wechat-1x1">…</section> 1:1
+        <section class="poster wide"   id="wechat-21x9">…</section> 21:9
+
+      For WeChat covers, also include a <section class="pair-preview">
+      that places the 21:9 + 1:1 side-by-side for review.
+
+      Hard rules every poster must honor:
+        - exactly one --accent in the entire deck
+        - no border-radius, no box-shadow, no gradients
+        - card-ink / card-accent / card-fill / card-outlined are
+          mutually exclusive — never combine on one node
+        - "the larger, the lighter": ≥ 200px must use weight 200
+    -->
+
+    <section class="poster xhs soviet" id="xhs-01">
+      <div class="content">
+        <div class="chrome-min"><span>DSH / AGENT MESH</span><span>01 / 06</span></div>
+        <div class="cover-intro">
+          <div>
+            <p class="soviet-kicker">LOCAL CONTROL PLANE / OPEN SOURCE</p>
+            <h1 class="soviet-title">把多个<br><span class="red">coding CLI</span><br>接进一个<br>DSH 对话</h1>
+            <p class="soviet-lead">在同一个会话里选择执行器、接续原生上下文，并把复杂任务交给有边界的协作路由。</p>
+          </div>
+          <div class="cover-stamp"><strong>01</strong>ONE THREAD<br>LOCAL AGENTS<br>STABLE HANDOFF</div>
+        </div>
+        <div class="soviet-system cover-system">
+          <span class="system-label l1">DSH / SESSION</span>
+          <span class="system-label l2">MESH / MAP</span>
+          <span class="system-label l3">HANDOFF / PASS</span>
+          <span class="system-label l4">NATIVE / CLI</span>
+          <div class="support s1"></div><div class="support s2"></div><div class="link"></div>
+          <div class="platform p1"></div><div class="platform p2"></div><div class="platform p3"></div><div class="platform p4"></div>
+          <div class="worker w1"></div><div class="worker w2"></div><div class="worker w3"></div><div class="worker w4"></div>
+          <div class="road"></div><div class="terrain"></div>
+        </div>
+        <div class="cover-rail">
+          <div><span class="soviet-meta">SELECT</span><span class="soviet-note">选择执行器</span></div>
+          <div><span class="soviet-meta">RESUME</span><span class="soviet-note">恢复会话</span></div>
+          <div><span class="soviet-meta">ROUTE</span><span class="soviet-note">有边界协作</span></div>
+        </div>
+        <div class="soviet-foot"><span class="soviet-note">不是第二个聊天窗口，是 DSH 与本机 CLI 之间的控制面。</span><span class="soviet-meta">MIT / NODE 18+</span></div>
+      </div>
+    </section>
+
+    <section class="poster xhs soviet deep" id="xhs-02">
+      <div class="content">
+        <div class="chrome-min"><span>WHY / THE GAP</span><span>02 / 06</span></div>
+        <div class="problem-intro">
+          <p class="soviet-kicker">THE WORK SHOULD CONTINUE</p>
+          <h2 class="soviet-title">切换不该<br><span class="red">重新开场</span></h2>
+          <p class="soviet-lead">本机工具各自强大，但没有连接层，工作就会被配置、上下文和失效会话反复打断。</p>
+        </div>
+        <div class="problem-bars">
+          <div class="problem-row"><span class="problem-index">01 / CONFIG</span><span class="problem-title">配置散落</span><span class="problem-copy">模型、认证和会话边界各在自己的 CLI 里。</span></div>
+          <div class="problem-row"><span class="problem-index">02 / CONTEXT</span><span class="problem-title">上下文断掉</span><span class="problem-copy">换执行器，不该等于把任务再讲一遍。</span></div>
+          <div class="problem-row"><span class="problem-index">03 / RECOVERY</span><span class="problem-title">超时无退路</span><span class="problem-copy">原生会话失效时，工作仍要有下一步。</span></div>
+        </div>
+        <div class="problem-note"><p class="soviet-lead">Agent Mesh 把这些差异收束到一个稳定的 DSH 会话里。</p></div>
+        <div class="problem-rail">
+          <div><span class="soviet-meta">KEEP</span><p class="soviet-note">原生配置</p></div>
+          <div><span class="soviet-meta">CARRY</span><p class="soviet-note">DSH 上下文</p></div>
+          <div><span class="soviet-meta">LIMIT</span><p class="soviet-note">调用边界</p></div>
+        </div>
+        <div class="soviet-foot"><span class="soviet-note">NATIVE / DURABLE / BOUNDED</span><span class="soviet-meta">SYSTEM 02</span></div>
+      </div>
+    </section>
+
+    <section class="poster xhs soviet" id="xhs-03">
+      <div class="content">
+        <div class="chrome-min"><span>ARCH / ONE THREAD</span><span>03 / 06</span></div>
+        <div class="arch-intro">
+          <p class="soviet-kicker">THREE LAYERS / ONE WORKFLOW</p>
+          <h2 class="soviet-title">一条会话<br><span class="red">接住多种执行器</span></h2>
+          <p class="soviet-lead">DSH 保留原生输入与 transcript，Agent Mesh 负责发现、映射、交接和恢复。</p>
+        </div>
+        <div class="soviet-arch arch-stage">
+          <span class="system-label l1">01 / HOST</span>
+          <span class="system-label l2">02 / CONTROL</span>
+          <span class="system-label l3">03 / NATIVE</span>
+          <div class="support s1"></div><div class="support s2"></div><div class="link"></div>
+          <div class="platform p1"></div><div class="platform p2"></div><div class="platform p3"></div><div class="platform p4"></div>
+          <div class="worker w1"></div><div class="worker w2"></div><div class="worker w3"></div><div class="worker w4"></div>
+          <div class="road"></div><div class="terrain"></div>
+        </div>
+        <div class="arch-captions">
+          <div><span class="soviet-meta">DSH</span><p class="soviet-note">原生 composer<br>模型席位 / transcript</p></div>
+          <div><span class="soviet-meta">MESH</span><p class="soviet-note">发现 / 映射<br>handoff / 恢复</p></div>
+          <div><span class="soviet-meta">CLI</span><p class="soviet-note">Codex · Claude<br>ACP · Pi · ZCode</p></div>
+        </div>
+        <div class="soviet-foot"><span class="soviet-note">一条 DSH 会话，接住多种本机工作入口。</span><span class="soviet-meta">ARCH / 03</span></div>
+      </div>
+    </section>
+
+    <section class="poster xhs soviet deep" id="xhs-04">
+      <div class="content">
+        <div class="chrome-min"><span>INTERFACE / NATIVE SLOT</span><span>04 / 06</span></div>
+        <div class="evidence-intro">
+          <p class="soviet-kicker">WHAT CHANGES FOR THE USER</p>
+          <h2 class="soviet-title">只加一个<br><span class="red">选择器</span></h2>
+          <p class="soviet-lead">不造第二个 composer。你仍在 DSH 的原生输入栏里工作，只是多了本机执行器与模型席位。</p>
+        </div>
+        <div class="evidence-frame">
+          <img src="assets/dsh-model-menu.png" alt="DSH Agent Mesh model menu with local harness choices">
+          <span class="evidence-callout">NATIVE SLOT / 01</span>
+        </div>
+        <div class="evidence-steps">
+          <div><span class="soviet-meta">01 / HARNESS</span><p class="soviet-note">先选执行器</p></div>
+          <div><span class="soviet-meta">02 / MODEL</span><p class="soviet-note">复用原生配置</p></div>
+          <div><span class="soviet-meta">03 / AUTO</span><p class="soviet-note">复杂任务才展开</p></div>
+        </div>
+        <div class="evidence-principle">
+          <div><span class="soviet-meta">ONE COMPOSER</span><p class="soviet-note">一个输入入口</p></div>
+          <div><span class="soviet-meta">NATIVE CONFIG</span><p class="soviet-note">不复制凭据</p></div>
+          <div><span class="soviet-meta">BOUND RESULT</span><p class="soviet-note">结果可追踪</p></div>
+        </div>
+        <div class="soviet-foot"><span class="soviet-note">插件只影子化 DSH 原有的 model slot。</span><span class="soviet-meta">EVIDENCE</span></div>
+      </div>
+    </section>
+
+    <section class="poster xhs soviet" id="xhs-05">
+      <div class="content">
+        <div class="chrome-min"><span>TOOLS / CAPABILITY</span><span>05 / 06</span></div>
+        <div class="actions-intro">
+          <p class="soviet-kicker">FROM DISCOVERY TO DELIVERY</p>
+          <h2 class="soviet-title">把本机 Agent<br><span class="red">变成可用动作</span></h2>
+          <p class="soviet-lead">四个动作，把“能找到”变成“能继续完成工作”。</p>
+        </div>
+        <div class="action-list">
+          <div class="action-row"><span class="action-index">01</span><span class="action-title">Discover</span><span class="action-copy">读取本机 harness / model 元数据，不搬运凭据。</span><span class="action-mark"></span></div>
+          <div class="action-row"><span class="action-index">02</span><span class="action-title">Start / Resume</span><span class="action-copy">每个 DSH × harness × model 路由可持续。</span><span class="action-mark"></span></div>
+          <div class="action-row"><span class="action-index">03</span><span class="action-title">Handoff</span><span class="action-copy">跨执行器传递摘要、文件、测试与阻塞点。</span><span class="action-mark"></span></div>
+          <div class="action-row"><span class="action-index">04</span><span class="action-title">Route</span><span class="action-copy">调用数、分支数、上下文和期限都有上限。</span><span class="action-mark"></span></div>
+        </div>
+        <div class="action-foundation">
+          <div><span class="soviet-meta">DISCOVERY</span><p class="soviet-note">只读发现</p></div>
+          <div><span class="soviet-meta">HANDOFF</span><p class="soviet-note">结构化交接</p></div>
+          <div><span class="soviet-meta">ROUTE</span><p class="soviet-note">硬边界协作</p></div>
+        </div>
+        <div class="soviet-foot"><span class="soviet-note">选择、恢复、交接、路由：一套可检查的本机工作流。</span><span class="soviet-meta">ACTIONS / 04</span></div>
+      </div>
+    </section>
+
+    <section class="poster xhs soviet deep" id="xhs-06">
+      <div class="content">
+        <div class="chrome-min"><span>TAKEAWAY / RELEASE</span><span>06 / 06</span></div>
+        <div class="closing-intro">
+          <p class="soviet-kicker">THE BOUNDARY IS THE PRODUCT</p>
+          <h2 class="soviet-title">保留原生<br><span class="red">只补连接</span></h2>
+          <p class="soviet-lead">凭据留在原生存储，DSH 保留原生体验，Agent Mesh 只把连接、恢复和协作补起来。</p>
+        </div>
+        <div class="soviet-arch closing-stage">
+          <span class="system-label l1">NATIVE / KEEP</span>
+          <span class="system-label l2">MESH / CONNECT</span>
+          <span class="system-label l3">DSH / CONTINUE</span>
+          <div class="support s1"></div><div class="support s2"></div><div class="link"></div>
+          <div class="platform p1"></div><div class="platform p2"></div><div class="platform p3"></div><div class="platform p4"></div>
+          <div class="worker w1"></div><div class="worker w2"></div><div class="worker w3"></div><div class="worker w4"></div>
+          <div class="road"></div><div class="terrain"></div>
+        </div>
+        <div class="closing-rail"><div><span class="soviet-meta">IN SHORT</span><p class="soviet-note">不是第二个聊天窗口，是 DSH 与本机 coding CLI 之间的控制面。</p></div><span class="closing-number">06</span></div>
+        <div class="soviet-foot"><span class="soviet-note">GitHub-ready DSH plugin · MIT · Node.js 18.18+</span><span class="soviet-meta">SHIP / 2026</span></div>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

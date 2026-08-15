@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+coverage/
+.tmp/
+*.log
+local-tests/dsh-agent-mesh-soviet/output/
+local-tests/**/output/thumbs/

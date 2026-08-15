@@ -1,0 +1,14 @@
+export { MeshError, assertMesh, asMeshError } from './errors.js';
+export { EventStore, defaultStoreRoot } from './event-store.js';
+export { MessageBus } from './message-bus.js';
+export { MeshRuntime } from './runtime.js';
+export { MeshRouter, ROUTER_VERSION, classify as classifyRoute, profileKey as routeProfileKey } from './router.js';
+export { ProfileRegistry, DEFAULT_PROFILES, normalizeProfile } from './profiles.js';
+export { CodexAdapter } from './adapters/codex.js';
+export { ClaudeAdapter } from './adapters/claude.js';
+export { AcpAdapter } from './adapters/acp.js';
+export { MockAdapter } from './adapters/mock.js';
+export { RpcAgentAdapter } from './adapters/rpc-agent.js';
+export { ZcodeAdapter } from './adapters/zcode.js';
+export { discoverLocalHarnesses, parseJsonc, parseTomlLite, parseYamlLite, publicDiscovery } from './discovery.js';
+export { diagnose } from './doctor.js';
